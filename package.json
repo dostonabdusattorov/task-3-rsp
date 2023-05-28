@@ -1,0 +1,23 @@
+{
+  "name": "task-3-rsp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dostonabdusattorov/task-3-rsp.git"
+  },
+  "author": "Doston Abdusattorov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dostonabdusattorov/task-3-rsp/issues"
+  },
+  "homepage": "https://github.com/dostonabdusattorov/task-3-rsp#readme"
+}
