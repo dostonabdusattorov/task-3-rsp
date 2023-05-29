@@ -8,7 +8,7 @@ const rl = createInterface({ input, output });
 
 class Table {
   generate(moves) {
-    const data = [[" v PC / User > ", ...moves]];
+    const data = [[" v PC / You > ", ...moves]];
 
     for (let i = 0; i < moves.length; i++) {
       const row = [moves[i]];
@@ -65,12 +65,12 @@ const game = (moves) => {
       "wrong number of arguments. you should give an odd number >=3 of strings!"
     );
 
-    return;
+    return rl.close();
   }
 
   if (new Set(moves).size !== moves.length) {
     console.log("do not repeat moves. moves should be non-repeating strings!");
-    return;
+    return rl.close();
   }
 
   const key = new Key().generate();
