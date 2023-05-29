@@ -2,8 +2,26 @@ const { createHmac } = require("crypto");
 const { createInterface } = require("readline");
 const { argv, stdin: input, stdout: output } = require("process");
 const { v4: keyGenerator } = require("uuid");
+const { table } = require("ascii-data-table").default;
 
 const rl = createInterface({ input, output });
+
+class Table {
+  generate(moves) {
+    const data = [[" v PC / User > ", ...moves]];
+
+    for (let i = 0; i < moves.length; i++) {
+      const row = [moves[i]];
+      row[i + 1] = "Draw";
+      for (let j = 1; j < Math.floor(moves.length / 2) + 1; j++) {
+        row[((i + j) % moves.length) + 1] = "Win";
+        row[((moves.length + (i - j)) % moves.length) + 1] = "Lose";
+      }
+      data.push(row);
+    }
+    return table(data);
+  }
+}
 
 class Rules {
   constructor(userMove, computerMove, moves) {
@@ -12,43 +30,22 @@ class Rules {
     this.moves = moves;
   }
 
-  getOptions() {
-    const winOptions = [],
-      loseOptions = [];
+  getWinner() {
+    const winOptions = [];
 
     for (let i = 1; i < Math.floor(this.moves.length / 2) + 1; i++) {
-      winOptions.push(this.moves[(this.computerMove + i) % 5]);
-      loseOptions.push(
-        this.moves[(this.moves.length + this.computerMove - i) % 5]
-      );
+      winOptions.push(this.moves[(this.computerMove + i) % moves.length]);
     }
 
-    return { winOptions, loseOptions };
-  }
-
-  getWinner() {
     if (this.moves[+this.userMove - 1] === this.moves[this.computerMove]) {
       return "Draw!";
-    } else if (
-      this.getOptions().winOptions.includes(this.moves[+this.userMove - 1])
-    ) {
-      return "You win!";
-    } else {
-      const winOptions = [],
-        loseOptions = [];
-
-      for (let i = 1; i < Math.floor(this.moves.length / 2) + 1; i++) {
-        winOptions.push(this.moves[(this.computerMove + i) % 5]);
-        loseOptions.push(
-          this.moves[(this.moves.length + this.computerMove - i) % 5]
-        );
-      }
-      return "Computer win!";
     }
+    if (winOptions.includes(this.moves[+this.userMove - 1])) {
+      return "You win!";
+    }
+    return "Computer win!";
   }
 }
-
-class Table {}
 
 class Key {
   generate() {
@@ -94,6 +91,7 @@ const game = (moves) => {
       if (+userMove === 0) return rl.close();
 
       if (userMove === "?") {
+        console.log(new Table().generate(moves));
       }
       if (+userMove <= moves.length && +userMove > 0) {
         console.log(`Your move: ${moves[+userMove - 1]}`);
